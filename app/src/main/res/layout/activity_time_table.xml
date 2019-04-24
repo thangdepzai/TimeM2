@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:weightSum="10"
+    android:orientation="vertical"
+    android:layout_height="match_parent"
+    tools:context=".Activity.TimeTableActivity">
+
+    <TextView
+        android:background="@drawable/shape_row"
+        android:gravity="center"
+        android:text="TimeTable"
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="0dp" />
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_weight="1"
+        android:weightSum="8.5"
+        android:layout_width="match_parent"
+        android:layout_height="0dp">
+        <TextView
+            android:text="Buổi"
+            android:layout_weight="1"
+            android:background="@drawable/shape_row"
+            android:gravity="center"
+            android:layout_width="0dp"
+            android:layout_height="match_parent" />
+        <TextView
+            android:text="Tiết"
+            android:background="@drawable/shape_row"
+            android:layout_weight="0.5"
+            android:gravity="center"
+            android:layout_width="0dp"
+            android:layout_height="match_parent" />
+        <TextView
+            android:text="Thứ 2"
+            android:background="@drawable/shape_row"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:layout_width="0dp"
+            android:layout_height="match_parent" />
+        <TextView
+            android:text="Thứ 3"
+            android:background="@drawable/shape_row"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:layout_width="0dp"
+            android:layout_height="match_parent" />
+        <TextView
+            android:text="Thứ 4"
+            android:background="@drawable/shape_row"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:layout_width="0dp"
+            android:layout_height="match_parent" />
+        <TextView
+            android:text="Thứ 5"
+            android:background="@drawable/shape_row"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:layout_width="0dp"
+            android:layout_height="match_parent" />
+        <TextView
+            android:text="Thứ 6"
+            android:background="@drawable/shape_row"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:layout_width="0dp"
+            android:layout_height="match_parent" />
+        <TextView
+            android:text="Thứ 7"
+            android:background="@drawable/shape_row"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:layout_width="0dp"
+            android:layout_height="match_parent" />
+        <TextView
+            android:text="Chủ Nhật"
+            android:background="@drawable/shape_row"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:layout_width="0dp"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_weight="8"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:weightSum="8.5"
+        android:layout_height="0dp">
+        <LinearLayout
+            android:layout_weight="4"
+            android:weightSum="8.5"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="0dp">
+            <TextView
+                android:layout_weight="1"
+                android:gravity="center"
+                android:background="@drawable/shape_row"
+                android:text="Sáng"
+                android:layout_width="0dp"
+                android:layout_height="match_parent" />
+
+            <TableLayout
+
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="7"
+                android:stretchColumns="7">
+
+                <TableRow>
+
+                </TableRow>
+
+                <TableRow>
+
+                </TableRow>
+
+                <TableRow>
+
+                </TableRow>
+
+                <TableRow>
+
+                </TableRow>
+
+                <TableRow>
+
+                </TableRow>
+
+                <TableRow>
+
+                </TableRow>
+            </TableLayout>
+
+
+        </LinearLayout>
+        <ImageView
+            android:background="#00ACC1"
+            android:layout_weight="0.5"
+            android:layout_width="match_parent"
+            android:layout_height="0dp" />
+        <LinearLayout
+            android:layout_weight="4"
+            android:weightSum="8.5"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="0dp">
+            <TextView
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="Chiều"
+                android:background="@drawable/shape_row"
+                android:layout_width="0dp"
+                android:layout_height="match_parent" />
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+</LinearLayout>

@@ -1,0 +1,27 @@
+<resources>
+    <string name="app_name">TimeM</string>
+    <string name="fb_app_id">264438621165724</string>
+    <string name="account_kit_client_token">f0a3e6ce638383554c82d2e46fa5ca78</string>
+    <string name="ak_login_protocol_scheme">akf0a3e6ce638383554c82d2e46fa5ca78</string>
+    <string name="key_hash_fb">hVpHgpJXal2c10Jpv8Zgusarn0U=</string>
+    <string-array name="header_title">
+        <item></item>
+        <item>Mon</item>
+        <item>Tue</item>
+        <item>Wed</item>
+        <item>Thu</item>
+        <item>Fri</item>
+        <item>Sat</item>
+        <item>Sun</item>
+    </string-array>
+
+    <string-array name="days">
+        <item >Mon</item>
+        <item >Tue</item>
+        <item >Wed</item>
+        <item >Thu</item>
+        <item >Fri</item>
+        <item>Sat</item>
+        <item>Sun</item>
+    </string-array>
+</resources>

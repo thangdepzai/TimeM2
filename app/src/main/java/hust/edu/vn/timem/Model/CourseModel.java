@@ -1,7 +1,10 @@
 package hust.edu.vn.timem.Model;
 
 
-public class CourseModel {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class CourseModel implements Parcelable {
 
     private String uid;         //学生 id
     private String cid;         //课程 id
@@ -15,6 +18,10 @@ public class CourseModel {
     private int endWeek;        //结束周次
     private int dayOfWeek;      //周几
     private String classroom;   //教室
+
+    public CourseModel() {
+    }
+
     private String teacher;     //教师
 
     public String getUid() {
@@ -120,5 +127,55 @@ public class CourseModel {
     public void setTeacher(String teacher) {
         this.teacher = teacher;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(uid);
+        dest.writeString(cid);
+        dest.writeString(cname);
+        dest.writeString(schoolYear);
+        dest.writeString(term);
+        dest.writeFloat(credit);
+        dest.writeInt(startSection);
+        dest.writeInt(endSection);
+        dest.writeInt(startWeek);
+        dest.writeInt(endWeek);
+        dest.writeInt(dayOfWeek);
+        dest.writeString(classroom);
+        dest.writeString(teacher);
+
+    }
+    public CourseModel(Parcel in) {
+        uid = in.readString();
+        cid = in.readString();
+        cname = in.readString();
+        schoolYear = in.readString();
+        term = in.readString();
+        credit = in.readFloat();
+        startSection = in.readInt();
+        endSection = in.readInt();
+        startWeek = in.readInt();
+        endWeek = in.readInt();
+        dayOfWeek = in.readInt();
+        classroom = in.readString();
+        teacher = in.readString();
+    }
+    public static final Parcelable.Creator<CourseModel> CREATOR = new Parcelable.Creator<CourseModel>() {
+        @Override
+        public CourseModel createFromParcel(Parcel in) {
+            return new CourseModel(in);
+        }
+
+        @Override
+        public CourseModel[] newArray(int size) {
+            return new CourseModel[size];
+        }
+    };
+
 }
 

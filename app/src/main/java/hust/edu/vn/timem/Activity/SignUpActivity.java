@@ -1,22 +1,29 @@
 package hust.edu.vn.timem.Activity;
 
 import android.app.Activity;
-
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.accountkit.Account;
+import com.facebook.accountkit.AccountKit;
+import com.facebook.accountkit.AccountKitCallback;
+import com.facebook.accountkit.AccountKitError;
 import com.facebook.accountkit.AccountKitLoginResult;
+import com.facebook.accountkit.PhoneNumber;
 import com.facebook.accountkit.ui.AccountKitActivity;
 import com.facebook.accountkit.ui.AccountKitConfiguration;
 import com.facebook.accountkit.ui.LoginType;
 
-import hust.edu.vn.timem.Activity.MainActivity;
+import hust.edu.vn.timem.Data.SQLiteUser;
+import hust.edu.vn.timem.Model.UserModel;
 import hust.edu.vn.timem.R;
+import hust.edu.vn.timem.UserPreference;
 
 public class SignUpActivity extends Activity {
     EditText edtUsername, edtPassW;
@@ -24,6 +31,9 @@ public class SignUpActivity extends Activity {
     Button btnSignUp;
     boolean vaildUsername = false,  vaildPass = false;
     private static final int REQUEST_CODE = 999;
+    private SQLiteUser userDatabaseHelper;
+    private UserModel userModel = new UserModel();
+    private UserPreference userPreference;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,8 +44,8 @@ public class SignUpActivity extends Activity {
         txtPassError = findViewById(R.id.txtPassError);
 
         btnSignUp = findViewById(R.id.btnSignUp);
-
-
+        userDatabaseHelper = new SQLiteUser(this);
+        userPreference = UserPreference.getUserPreference(this);
         btnSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -57,6 +67,7 @@ public class SignUpActivity extends Activity {
                     txtPassError.setText("");
                 }
                 if(vaildUsername && vaildPass){
+
                     startLoginPage(LoginType.PHONE);
 
                 }
@@ -65,9 +76,12 @@ public class SignUpActivity extends Activity {
 
     }
 
-    private boolean isExists(String toString) {
-        // firebase
-        return false;
+    private boolean isExists(String username) {
+        if (!userDatabaseHelper.checkUser(username)) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
     private void startLoginPage(LoginType loginType) {
@@ -88,16 +102,52 @@ public class SignUpActivity extends Activity {
         if(requestCode  == REQUEST_CODE){
             AccountKitLoginResult result = data.getParcelableExtra(AccountKitLoginResult.RESULT_KEY);
             if(result.getError()!=null){
-                Toast.makeText(this, ""+result.getError().getErrorType().getMessage(), Toast.LENGTH_SHORT);
+                Toast.makeText(this, ""+result.getError().getErrorType().getMessage(), Toast.LENGTH_SHORT).show();
                 return;
 
             }
             else if(result.wasCancelled()){
-                Toast.makeText(this, "Cancel", Toast.LENGTH_SHORT);
+                Toast.makeText(this, "Cancel", Toast.LENGTH_SHORT).show();
                 return;
             }else{
-                Toast.makeText(this, "Successfuly !", Toast.LENGTH_SHORT);
+                AccountKit.getCurrentAccount(new AccountKitCallback<Account>() {
+                                                 @Override
+                                                 public void onSuccess(Account account) {
+                                                     if(account.getPhoneNumber()!=null) {
+                                                         PhoneNumber phoneNumber = account.getPhoneNumber();
+                                                         String phoneNumberString = phoneNumber.toString();
+                                                         Log.i("Success",phoneNumberString );
+                                                         userModel.setSdt(phoneNumberString);
+                                                         userPreference.setUserSdt(phoneNumberString);
+
+
+                                                     }
+
+                                                     if(account.getEmail()!=null){
+                                                         String mail = account.getEmail();
+                                                         userModel.setMail(mail);
+                                                         userPreference.setUserEmail(mail);
+
+                                                     }
+                                                     userModel.setUserName(edtUsername.getText().toString());
+                                                     userModel.setPassW(edtPassW.getText().toString());
+                                                     userPreference.setUserName(edtUsername.getText().toString());
+                                                     userPreference.setPassword(edtPassW.getText().toString());
+                                                     userDatabaseHelper.addUser(userModel);
+                                                     Log.i("Success", userModel.getSdt());
+                                                     userPreference.setUserSignInStatus(true);
+
+                                                 }
+
+                                                 @Override
+                                                 public void onError(AccountKitError accountKitError) {
+
+                                                 }
+                                             });
+                Toast.makeText(this, "Successfuly !"+ userModel.getSdt(), Toast.LENGTH_SHORT).show();
                 startActivity(new Intent(this, MainActivity.class));
+                finish();
+
             }
 
         }

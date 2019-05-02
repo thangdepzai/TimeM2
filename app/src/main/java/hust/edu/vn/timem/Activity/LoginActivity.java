@@ -22,7 +22,10 @@ import com.facebook.accountkit.ui.LoginType;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+import hust.edu.vn.timem.Data.SQLiteUser;
+import hust.edu.vn.timem.Model.UserModel;
 import hust.edu.vn.timem.R;
+import hust.edu.vn.timem.UserPreference;
 
 public class LoginActivity extends Activity {
     Button btnPhoneLogin;
@@ -33,8 +36,8 @@ public class LoginActivity extends Activity {
     private static final int REQUEST_CODE = 999;
     boolean vaildUsername = false,  vaildPass = false;
     TextView txtUserError,txtPassError;
-
-
+    private SQLiteUser userDatabaseHelper;
+    private UserPreference userPreference;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,7 +51,8 @@ public class LoginActivity extends Activity {
         txtSignUp = findViewById(R.id.txtSignUp);
         txtUserError = findViewById(R.id.txtUserError);
         txtPassError = findViewById(R.id.txtPassError);
-
+        userDatabaseHelper = new SQLiteUser(this);
+        userPreference = UserPreference.getUserPreference(this);
         txtSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -91,11 +95,20 @@ public class LoginActivity extends Activity {
                     vaildPass = true;
                     txtPassError.setText("");
                 }
-                if(vaildPass && vaildUsername){
+                if(vaildPass && vaildUsername && userDatabaseHelper.checkUser(user, pass) ){
+                    UserModel userModel = userDatabaseHelper.getUser(user, pass);
+                    userPreference.setUserName(user);
+                    userPreference.setPassword(pass);
+                    userPreference.setUserSdt(userModel.getSdt());
+                    userPreference.setUserEmail(userModel.getMail());
+                    userPreference.setUserSignInStatus(true);
+                    edtPassW.setText("");
                    // check pass in firebase
                     boolean vaild = true;
                     if(vaild){
+                        Log.i("Success",userModel.getUserName()+ ", "+ userModel.getSdt()+", "+ userModel.getPassW() );
                         startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                        finish();
                     }else Toast.makeText(getApplicationContext(), "Sai username hoặc password", Toast.LENGTH_SHORT).show();
                 }
             }

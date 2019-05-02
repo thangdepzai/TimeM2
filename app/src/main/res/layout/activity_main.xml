@@ -9,15 +9,36 @@
 
 
     <View
+        android:id="@+id/view"
         android:layout_width="match_parent"
         android:layout_height="230dp"
-        android:layout_marginEnd="0dp"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="0dp"
         android:background="@drawable/bgheader"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/vpPager"
+        android:layout_width="match_parent"
+        android:layout_height="137dp"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/view">
+        <!--<include layout="@layout/weather_card" />-->
+    </android.support.v4.view.ViewPager>
+
+    <!--<android.support.design.widget.TabLayout-->
+        <!--app:tabGravity="center"-->
+        <!--android:id="@+id/tabDots"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginBottom="8dp"-->
+        <!--app:layout_constraintBottom_toTopOf="@+id/linearLayout2"-->
+        <!--app:layout_constraintEnd_toEndOf="@+id/view"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+        <!--app:tabBackground="@drawable/tab_selector"-->
+        <!--app:tabIndicatorHeight="0dp" />-->
 
 
     <ImageView

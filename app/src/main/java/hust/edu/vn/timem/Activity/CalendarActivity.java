@@ -1,25 +1,14 @@
 package hust.edu.vn.timem.Activity;
 
-import android.graphics.Color;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 
 import com.shrikanthravi.collapsiblecalendarview.data.Day;
 import com.shrikanthravi.collapsiblecalendarview.widget.CollapsibleCalendar;
-import com.shrikanthravi.collapsiblecalendarview.widget.UICalendar;
-
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 
 import hust.edu.vn.timem.R;
-
-import static java.util.Calendar.DATE;
-import static java.util.Calendar.DAY_OF_MONTH;
-import static java.util.Calendar.MONTH;
-import static java.util.Calendar.YEAR;
 
 public class CalendarActivity extends AppCompatActivity {
 //    MaterialCalendarView calendarView;

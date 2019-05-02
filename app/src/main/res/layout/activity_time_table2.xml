@@ -5,18 +5,49 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:weightSum="10"
     tools:context=".Activity.TimeTableActivity">
+    <android.support.constraint.ConstraintLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="60dp">
+
+        <TextView
+            android:id="@+id/txtTopBar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/bg"
+            android:gravity="center"
+            android:textSize="20sp"
+            android:fontFamily="@font/mm"
+            android:text="Thời Khóa Biểu"
+            android:textColor="#FFFF"
+             />
+
+        <ImageView
+            android:id="@+id/btnAdd"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            android:src="@drawable/ic_add"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </android.support.constraint.ConstraintLayout>
 
 
+    <!--<com.github.tlaabs.timetableview.TimetableView-->
+        <!--android:id="@+id/timetable"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--app:column_count="8"-->
+        <!--app:header_title="@array/header_title"-->
+        <!--app:layout_constraintTop_toTopOf="parent"-->
+        <!--app:row_count="24"-->
+        <!--app:start_time="6"-->
+        <!--tools:layout_editor_absoluteX="76dp" />-->
+    <include layout="@layout/timetable_layout" />
 
-
-    <com.github.tlaabs.timetableview.TimetableView
-    android:id="@+id/timetable"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    app:header_title="@array/header_title"
-    app:row_count="12"
-    app:column_count="8"
-    app:start_time="6" />
 
 </LinearLayout>

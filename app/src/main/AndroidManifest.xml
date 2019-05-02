@@ -5,6 +5,10 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission..ACCESS_COARSE_LOCATION" />
 
     <application
         android:allowBackup="true"
@@ -13,9 +17,16 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Activity.TimeTableActivity"></activity>
+        <activity android:name=".Activity.NoteActivity" />
+        <activity android:name=".Activity.EditActivity" />
+        <activity android:name=".Activity.TimeTableActivity" />
         <activity android:name=".Activity.CalendarActivity" />
         <activity android:name=".Activity.SignUpActivity" />
+
+        <provider
+            android:name=".Data.TTDBProvider"
+            android:authorities="@string/authority"
+            android:exported="true" />
 
         <meta-data
             android:name="com.facebook.accountkit.ApplicationName"
@@ -42,13 +53,16 @@
             </intent-filter>
         </activity>
         <activity android:name=".Activity.MainActivity" />
-        <activity android:name=".Activity.LoginActivity">
+        <activity android:name=".Activity.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".Activity.AddNoteActivity" />
+        <activity android:name=".Activity.LoginActivity" />
+        <activity android:name=".Activity.TipsActivity"></activity>
     </application>
 
 </manifest>

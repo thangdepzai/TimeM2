@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="time_table_button_height">40dp</dimen>
+
+    <dimen name="logo_width">250dp</dimen>
+    <dimen name="logo_height">100dp</dimen>
+
+    <dimen name="time_step_text_size">3sp</dimen>
+    <dimen name="day_text_size">5sp</dimen>
+
+    <dimen name="title_bar_text_size">15sp</dimen>
+    <dimen name="title_bar_button_height">30dp</dimen>
+    <dimen name="content_text_size">12sp</dimen>
+    <dimen name="time_text_size">10sp</dimen>
+
+    <dimen name="time_table_text_size">3sp</dimen>
+
+    <dimen name="title_bar_height">40dp</dimen>
+    <dimen name="content_height">60dp</dimen>
+    <dimen name="spinner_height">40dp</dimen>
+    <dimen name="content_margin">30dp</dimen>
+
+    <dimen name="simple_button_heigth">45dp</dimen>
+</resources>

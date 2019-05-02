@@ -3,7 +3,10 @@
     <string name="fb_app_id">264438621165724</string>
     <string name="account_kit_client_token">f0a3e6ce638383554c82d2e46fa5ca78</string>
     <string name="ak_login_protocol_scheme">akf0a3e6ce638383554c82d2e46fa5ca78</string>
+    <string name="key_api_weather_map">88f432ce43a1426732637adbff1c2952</string>
     <string name="key_hash_fb">hVpHgpJXal2c10Jpv8Zgusarn0U=</string>
+    <string name="authority">TimeM.hust.edu.vn</string>
+    <string name="make_new_time_table">Manage your time!</string>
     <string-array name="header_title">
         <item></item>
         <item>Mon</item>
@@ -16,12 +19,44 @@
     </string-array>
 
     <string-array name="days">
-        <item >Mon</item>
-        <item >Tue</item>
-        <item >Wed</item>
-        <item >Thu</item>
-        <item >Fri</item>
+        <item>Mon</item>
+        <item>Tue</item>
+        <item>Wed</item>
+        <item>Thu</item>
+        <item>Fri</item>
         <item>Sat</item>
         <item>Sun</item>
     </string-array>
+
+    <string-array name="week_day">
+        <item>T2</item>
+        <item>T3</item>
+        <item>T4</item>
+        <item>T5</item>
+        <item>T6</item>
+    </string-array>
+    <string-array name="time_table_hours">
+        <item>09:00</item>
+        <item>09:30</item>
+        <item>10:00</item>
+        <item>10:30</item>
+        <item>11:00</item>
+        <item>11:30</item>
+        <item>12:00</item>
+        <item>12:30</item>
+        <item>13:00</item>
+        <item>13:30</item>
+        <item>14:00</item>
+        <item>14:30</item>
+        <item>15:00</item>
+        <item>15:30</item>
+        <item>16:00</item>
+        <item>16:30</item>
+        <item>17:00</item>
+        <item>17:30</item>
+        <item>18:00</item>
+    </string-array>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

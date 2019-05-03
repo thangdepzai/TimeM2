@@ -205,8 +205,8 @@ public class TimeTableActivity extends AppCompatActivity {
                         courseModel.setEndSection(Integer.parseInt(to_time_dialog.getText().toString()));
                         addData(courseModel);
 
-                        //listCourse = (ArrayList<CourseModel>) getData();
-                        listCourse.add(courseModel);
+                        listCourse = (ArrayList<CourseModel>) getData();
+                        //listCourse.add(courseModel);
                         mTimetable.loadCourses((List<CourseModel>) listCourse);
                         b.dismiss();
 

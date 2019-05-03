@@ -81,8 +81,9 @@ public class SQLiteTimeTable  extends SQLiteOpenHelper {
         String USER_DETAIL_SELECT_QUERY = "SELECT * FROM " + TABLE_TIMETABLE ;
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = db.rawQuery(USER_DETAIL_SELECT_QUERY, null);
-        try {do{
+        try {
                 if (cursor.moveToFirst()) {
+                    do{
                     CourseModel s = new CourseModel();
                     s.setUid(cursor.getInt(cursor.getColumnIndex(KEY_UID))+"");
                     s.setCname(cursor.getString(cursor.getColumnIndex(KEY_NAME)));
@@ -96,8 +97,8 @@ public class SQLiteTimeTable  extends SQLiteOpenHelper {
                     s.setDayOfWeek(cursor.getInt(cursor.getColumnIndex(KEY_DAY_OF_WEEK)));
                     s.setClassroom(cursor.getString(cursor.getColumnIndex(KEY_CLASS_ROOM)));
                     list_timetable.add(s);
-                }
-            }while (cursor.moveToNext());
+                }while (cursor.moveToNext());
+            }
         } catch (Exception e) {
             Log.d(TAG, "error bro");
         } finally {

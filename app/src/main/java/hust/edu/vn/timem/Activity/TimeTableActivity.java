@@ -118,7 +118,7 @@ public class TimeTableActivity extends AppCompatActivity {
                 from_week_dialog.setText(course.getStartWeek()+"");
                 to_time_dialog.setText(course.getEndSection()+"");
                 to_week_dialog.setText(course.getEndWeek()+"");
-                day_dialog.setText(course.getDayOfWeek()+"");
+                day_dialog.setText((course.getDayOfWeek()+1)+"");
 
                 btn_cancel= dialogView.findViewById(R.id.cancel);
                 btn_save = dialogView.findViewById(R.id.save);

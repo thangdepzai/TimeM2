@@ -170,7 +170,7 @@ public class TimetableView extends ViewGroup {
 
             tvItem.setTextColor(0xffffffff);
             tvItem.setTextSize(12);
-            tvItem.setText(new StringBuilder().append(course.getCname()).append("\nClass: ").append(course.getClassroom()).append("\n").append(course.getStartSection()).append("-").append(course.getEndSection()));
+            tvItem.setText(new StringBuilder().append(course.getCname()).append("\nRoom: ").append(course.getClassroom()).append("\n").append(course.getStartSection()).append("-").append(course.getEndSection()));
             tvItem.setGravity(Gravity.CENTER);
 
             tvItem.setBackgroundResource(colors[getColorIndex(course.getCname())]);

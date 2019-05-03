@@ -17,6 +17,7 @@ public class BaseHolder extends RecyclerView.ViewHolder {
     public ImageView img_note;
     public CardView card_item_note;
 
+
     public BaseHolder(View itemView) {
         super(itemView);
         txt_time =  itemView.findViewById(R.id.txt_time);
@@ -24,5 +25,7 @@ public class BaseHolder extends RecyclerView.ViewHolder {
         txt_title =  itemView.findViewById(R.id.txt_title);
         img_note =  itemView.findViewById(R.id.img_note);
         card_item_note =  itemView.findViewById(R.id.card_item_note);
+
     }
+
 }

@@ -72,6 +72,7 @@ public class TimetableView extends ViewGroup {
     private int CourseColorArrIndex = 0;
 
     private OnCourseItemClickListener mListener;
+    private OnCourseItemLongClickListener longClickListener;
 
     private int currentWeek;//Tuần hiện tại
 
@@ -180,6 +181,15 @@ public class TimetableView extends ViewGroup {
                     if (mListener != null) {
                         mListener.onCourseItemClick(course);
                     }
+                }
+            });
+            tvItem.setOnLongClickListener(new OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    if (longClickListener != null) {
+                        return longClickListener.onCourseItemLongClick(course);
+                    }
+                    return false;
                 }
             });
 
@@ -373,5 +383,11 @@ public class TimetableView extends ViewGroup {
 
     public interface OnCourseItemClickListener {
         void onCourseItemClick(CourseModel course);
+    }
+    public interface OnCourseItemLongClickListener {
+        boolean onCourseItemLongClick(CourseModel course);
+    }
+    public void setOnCourseItemLongClickListener(OnCourseItemLongClickListener listener) {
+        longClickListener = listener;
     }
 }

@@ -8,10 +8,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.PopupMenu;
+import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -23,6 +27,7 @@ import hust.edu.vn.timem.R;
 public class NoteActivity extends AppCompatActivity {
 
     FloatingActionButton btn_add_note;
+    ImageButton btn_filter;
 
     RecyclerView lst_note;
 
@@ -31,11 +36,36 @@ public class NoteActivity extends AppCompatActivity {
         setContentView(R.layout.activity_note);
         lst_note = findViewById(R.id.lst_note);
         btn_add_note = findViewById(R.id.btn_add_note);
-
+        btn_filter = findViewById(R.id.btn_filter);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
         lst_note.setLayoutManager(gridLayoutManager);
-
         DataItem();
+        btn_filter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PopupMenu popup = new PopupMenu(NoteActivity.this, btn_filter);
+                //Inflating the Popup using xml file
+                popup.getMenuInflater()
+                        .inflate(R.menu.menu_note, popup.getMenu());
+
+                //registering popup with OnMenuItemClickListener
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    public boolean onMenuItemClick(MenuItem item) {
+                        Toast.makeText(
+                                NoteActivity.this,
+                                "You Clicked : " + item.getTitle(),
+                                Toast.LENGTH_SHORT
+                        ).show();
+                        return true;
+                    }
+                });
+
+                popup.show(); //showing popup menu
+            }
+        });
+
+
+
         btn_add_note.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -51,7 +81,7 @@ public class NoteActivity extends AppCompatActivity {
                 edt_mota = dialogView.findViewById(R.id.edt_mota);
 
                 dialogBuilder.setView(dialogView);
-                dialogBuilder.setTitle("Add Note");
+                dialogBuilder.setTitle("Add note");
                 final AlertDialog b = dialogBuilder.create();
 
                 btn_cancel= dialogView.findViewById(R.id.cancel);
@@ -65,7 +95,6 @@ public class NoteActivity extends AppCompatActivity {
                         db_note.addData(time_now, edt_title.getText().toString(), edt_mota.getText().toString());
                         DataItem();
                         b.dismiss();
-
                     }
                 });
                 btn_cancel.setOnClickListener(new View.OnClickListener() {

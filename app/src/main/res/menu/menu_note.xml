@@ -1,9 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-    <item
-        android:id="@+id/mn_refresh"
-        app:showAsAction="always"
-        android:icon="@drawable/ic_sync"
-        android:title="Refresh"/>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+        <item
+            android:id="@+id/filter_default"
+            android:title="Mặc định"/>
+        <item
+            android:id="@+id/filter_day"
+            android:title="Lọc theo ngày"/>
+        <item
+            android:id="@+id/filter_day_of_week"
+            android:title="Lọc theo thứ"/>
+
+        <item
+            android:id="@+id/filter_month"
+            android:title="Lọc theo tháng"/>
+
+
+
 </menu>

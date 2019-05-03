@@ -6,23 +6,23 @@ import android.os.Parcelable;
 
 public class CourseModel implements Parcelable {
 
-    private String uid;         //学生 id
-    private String cid;         //课程 id
-    private String cname;       //课程名
-    private String schoolYear;  //学年
-    private String term;        //学期
-    private float credit;       //学分
-    private int startSection;   //开始节次
-    private int endSection;     //结束节次
-    private int startWeek;      //开始周次
-    private int endWeek;        //结束周次
-    private int dayOfWeek;      //周几
-    private String classroom;   //教室
+    private String uid;
+    private String cid;
+    private String cname;
+    private String schoolYear;
+    private String term;
+    private float credit;
+    private int startSection;
+    private int endSection;
+    private int startWeek;
+    private int endWeek;
+    private int dayOfWeek;
+    private String classroom;
 
     public CourseModel() {
     }
 
-    private String teacher;     //教师
+    private String teacher;
 
     public String getUid() {
         return uid;

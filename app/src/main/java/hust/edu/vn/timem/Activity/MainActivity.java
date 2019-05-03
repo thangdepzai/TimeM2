@@ -11,6 +11,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
@@ -28,17 +29,20 @@ import java.util.List;
 import hust.edu.vn.timem.Adapter.ViewPagerAdapter;
 import hust.edu.vn.timem.Fragment.WeatherForecastFragment;
 import hust.edu.vn.timem.R;
+import hust.edu.vn.timem.UserPreference;
 import hust.edu.vn.timem.WeatherUtil.Common.Common;
 
 
 public class MainActivity extends AppCompatActivity {
     ImageView TipActivity, NoteActivity, TimeTableActivity, CalendarActivity;
     ViewPager vpPager;
+    ImageView img_user;
+    TextView txt_user_name;
     //TabLayout tabLayout;
     private FusedLocationProviderClient fusedLocationProviderClient;
     private LocationCallback locationCallback;
     private LocationRequest locationRequest;
-
+    private UserPreference userPreference;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,6 +51,19 @@ public class MainActivity extends AppCompatActivity {
         NoteActivity = findViewById(R.id.NoteActivity);
         CalendarActivity = findViewById(R.id.CalendarActivity);
         TimeTableActivity = findViewById(R.id.TimeTableActivity);
+        img_user = findViewById(R.id.img_user);
+        txt_user_name = findViewById(R.id.txt_user_name);
+        userPreference = UserPreference.getUserPreference(this);
+        boolean state=userPreference.isUserLoggedIn();
+        if(state){
+            txt_user_name.setText(userPreference.getUserName());
+        }else txt_user_name.setText("Guess");
+        img_user.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), hust.edu.vn.timem.Activity.SettingActivity.class));
+            }
+        });
         //tabLayout = (TabLayout) findViewById(R.id.tabDots);
 
         Dexter.withActivity(this)
@@ -89,6 +106,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getApplicationContext(), hust.edu.vn.timem.Activity.NoteActivity.class));
+            }
+        });
+        TipActivity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), hust.edu.vn.timem.Activity.TipsActivity.class));
             }
         });
 

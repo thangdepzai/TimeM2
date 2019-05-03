@@ -49,6 +49,8 @@ public class TimetableView extends ViewGroup {
     private Paint mTitlePaint;//文字画笔
 
     private String[] dayOfWeek = {"T2", "T3", "T4", "T5", "T6", "T7", "CN"};
+    private  String[] startTime={"6:45","7:35","8:30","9:20","10:15","11:05","12:30","13:20","14:15","15:05","16:00","16:50" };
+    private  String[] endTime={"7:30","8:20","9:15","10:05","11:00","11:50","13:15","14:05","15:00","15:50","16:45","17:35" };
 
     public static final int colors[] = {R.drawable.select_course_item_blue,
             R.drawable.select_course_item_green, R.drawable.select_course_item_red,
@@ -170,7 +172,7 @@ public class TimetableView extends ViewGroup {
 
             tvItem.setTextColor(0xffffffff);
             tvItem.setTextSize(12);
-            tvItem.setText(new StringBuilder().append(course.getCname()).append("\nRoom: ").append(course.getClassroom()).append("\n").append(course.getStartSection()).append("-").append(course.getEndSection()));
+            tvItem.setText(new StringBuilder().append(course.getCname()).append("\n ").append(course.getClassroom()).append("\n").append(startTime[course.getStartSection()-1]).append("-").append(endTime[course.getEndSection()-1]));
             tvItem.setGravity(Gravity.CENTER);
 
             tvItem.setBackgroundResource(colors[getColorIndex(course.getCname())]);

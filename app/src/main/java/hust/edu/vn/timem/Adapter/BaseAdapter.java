@@ -81,8 +81,8 @@ public class BaseAdapter extends RecyclerView.Adapter<BaseHolder> {
                         baseHolder.txt_time.setText(time_now);
 
 //                        SQLiteNote db_note = new SQLiteNote(getApplicationContext());
-//                        db_note.addData(time_now, edt_title.getText().toString(), edt_mota.getText().toString());
-//                        DataItem();
+////                        db_note.addData(time_now, edt_title.getText().toString(), edt_mota.getText().toString());
+////                        DataItem();
                         dialog.dismiss();
 
                     }

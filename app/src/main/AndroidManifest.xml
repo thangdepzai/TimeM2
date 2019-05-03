@@ -14,6 +14,7 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:largeHeap="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
@@ -21,11 +22,6 @@
         <activity android:name=".Activity.TimeTableActivity" />
         <activity android:name=".Activity.CalendarActivity" />
         <activity android:name=".Activity.SignUpActivity" />
-
-        <provider
-            android:name=".Data.TTDBProvider"
-            android:authorities="@string/authority"
-            android:exported="true" />
 
         <meta-data
             android:name="com.facebook.accountkit.ApplicationName"
@@ -61,7 +57,8 @@
         </activity>
         <activity android:name=".Activity.AddNoteActivity" />
         <activity android:name=".Activity.LoginActivity" />
-        <activity android:name=".Activity.TipsActivity"></activity>
+        <activity android:name=".Activity.TipsActivity" />
+        <activity android:name=".Activity.SettingActivity"></activity>
     </application>
 
 </manifest>

@@ -1,7 +1,9 @@
 package hust.edu.vn.timem.Activity;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+
+import hust.edu.vn.timem.R;
 
 public class SettingActivity extends AppCompatActivity {
 

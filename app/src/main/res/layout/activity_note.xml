@@ -24,13 +24,13 @@
             android:textColor="#FFFF"
             />
 
-        <ImageView
-            android:id="@+id/btnAdd"
+        <ImageButton
+            android:id="@+id/btn_filter"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_marginTop="20dp"
             android:layout_marginEnd="20dp"
-            android:src="@drawable/ic_add"
+            android:background="@drawable/ic_filter"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 

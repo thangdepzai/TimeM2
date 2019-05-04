@@ -12,15 +12,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 import hust.edu.vn.timem.Model.NoteModel;
+import hust.edu.vn.timem.UserPreference;
 
 public class SQLiteNote extends SQLiteOpenHelper {
 
         private static final String TAG = SQLiteNote.class.getSimpleName();
+
+         private UserPreference userPreference;
         // Versi Database
         private static final int DATABASE_VERSION = 1;
 
         // Nama Database
-        private static final String DATABASE_NAME = "sttnf_result";
+        private static  String DATABASE_NAME = "sttnf_result";
 
         // Nama Table
         private static final String TABLE_NOTE = "tbl_note_daeng";
@@ -33,7 +36,8 @@ public class SQLiteNote extends SQLiteOpenHelper {
 
 
     public SQLiteNote(Context context) {
-        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        super(context, DATABASE_NAME+ ""+UserPreference.getUserPreference(context).getUserName(), null, DATABASE_VERSION);
+
     }
 
 
@@ -90,6 +94,7 @@ public class SQLiteNote extends SQLiteOpenHelper {
             if (cursor.moveToFirst()) {
                 do {
                     NoteModel itemObject = new NoteModel();
+                    itemObject.id = cursor.getInt(cursor.getColumnIndex(KEY_ID));
                     itemObject.time = cursor.getString(cursor.getColumnIndex(KEY_TIME));
                     itemObject.title = cursor.getString(cursor.getColumnIndex(KEY_TITLE));
                     itemObject.mota = cursor.getString(cursor.getColumnIndex(KEY_MOTA));
@@ -119,11 +124,11 @@ public class SQLiteNote extends SQLiteOpenHelper {
         return true;
     }
 
-    public void deleteItemSelected(String time) {
+    public void deleteItemKey(int key) {
         SQLiteDatabase db = getWritableDatabase();
         try {
             db.beginTransaction();
-            db.execSQL("DELETE from " + TABLE_NOTE + " WHERE time ='" + time + "'");
+            db.execSQL("DELETE from " + TABLE_NOTE + " WHERE "+KEY_ID+ " = " + key );
             db.setTransactionSuccessful();
         } catch (SQLException e) {
             Log.d(TAG, "Error while trying to delete  users detail");
@@ -131,5 +136,16 @@ public class SQLiteNote extends SQLiteOpenHelper {
             db.endTransaction();
         }
     }
+    public void update(NoteModel model, int key_note) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(KEY_TIME, model.time);
+        values.put(KEY_TITLE, model.title);
+        values.put(KEY_MOTA, model.mota);
+        db.update(TABLE_NOTE, values, KEY_ID + " = ?",
+                new String[]{String.valueOf(key_note)});
+        db.close();
+    }
+
 
 }

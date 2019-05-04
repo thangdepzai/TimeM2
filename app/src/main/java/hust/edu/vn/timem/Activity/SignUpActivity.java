@@ -24,12 +24,12 @@ import hust.edu.vn.timem.Data.SQLiteUser;
 import hust.edu.vn.timem.Model.UserModel;
 import hust.edu.vn.timem.R;
 import hust.edu.vn.timem.UserPreference;
+import hust.edu.vn.timem.Utils.PasswordValidator;
+import hust.edu.vn.timem.Utils.TextUtils;
 
 public class SignUpActivity extends Activity {
     EditText edtUsername, edtPassW;
-    TextView txtUserError,txtPassError;
     Button btnSignUp;
-    boolean vaildUsername = false,  vaildPass = false;
     private static final int REQUEST_CODE = 999;
     private SQLiteUser userDatabaseHelper;
     private UserModel userModel = new UserModel();
@@ -40,48 +40,33 @@ public class SignUpActivity extends Activity {
         setContentView(R.layout.activity_sign_up);
         edtUsername = findViewById(R.id.edtUsername);
         edtPassW = findViewById(R.id.edtPassW);
-        txtUserError = findViewById(R.id.txtUserError);
-        txtPassError = findViewById(R.id.txtPassError);
-
         btnSignUp = findViewById(R.id.btnSignUp);
         userDatabaseHelper = new SQLiteUser(this);
         userPreference = UserPreference.getUserPreference(this);
         btnSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!isUsername(edtUsername.getText().toString())) {
-                    txtUserError.setText("Only chars, numbers, underlines and start by a char");
-                    vaildUsername = false;
-                }else if(isExists(edtUsername.getText().toString())){
-                    txtUserError.setText("Tên đăng nhập đã tồn tại");
-                    vaildUsername = false;
+                if(!validate()){
+                    return;
+                }
+                 if(isExists(edtUsername.getText().toString())){
+                     Toast.makeText(getBaseContext(), "Tên đăng nhập đã tồn tại", Toast.LENGTH_LONG).show();
                 }else{
-                    txtUserError.setText("");
-                    vaildUsername = true;
-                }
-                if(edtPassW.getText().toString().length()<6){
-                    txtPassError.setText("Mật khẩu phải ít nhất 6 ký tự");
-                    vaildPass = false;
-                }else{
-                    vaildPass = true;
-                    txtPassError.setText("");
-                }
-                if(vaildUsername && vaildPass){
-
-                    startLoginPage(LoginType.PHONE);
-
-                }
+                     startLoginPage(LoginType.PHONE);
+                 }
             }
         });
 
     }
 
     private boolean isExists(String username) {
-        if (!userDatabaseHelper.checkUser(username)) {
-            return false;
-        } else {
-            return true;
-        }
+        return userDatabaseHelper.checkUser(username);
+    }
+    private boolean isExistsSDT(String sdt){
+        return userDatabaseHelper.checkUserSDT(sdt);
+    }
+    private boolean isExistsEmail(String email){
+        return userDatabaseHelper.checkUserMail(email);
     }
 
     private void startLoginPage(LoginType loginType) {
@@ -114,8 +99,13 @@ public class SignUpActivity extends Activity {
                                                  @Override
                                                  public void onSuccess(Account account) {
                                                      if(account.getPhoneNumber()!=null) {
+
                                                          PhoneNumber phoneNumber = account.getPhoneNumber();
                                                          String phoneNumberString = phoneNumber.toString();
+                                                         if(isExistsSDT(phoneNumberString)){
+                                                             Toast.makeText(SignUpActivity.this, "Số điện thoại đã tồn tại", Toast.LENGTH_SHORT).show();
+                                                             return;
+                                                         }
                                                          Log.i("Success",phoneNumberString );
                                                          userModel.setSdt(phoneNumberString);
                                                          userPreference.setUserSdt(phoneNumberString);
@@ -124,7 +114,12 @@ public class SignUpActivity extends Activity {
                                                      }
 
                                                      if(account.getEmail()!=null){
+
                                                          String mail = account.getEmail();
+                                                         if(isExistsSDT(mail)){
+                                                             Toast.makeText(SignUpActivity.this, "Email đã tồn tại", Toast.LENGTH_SHORT).show();
+                                                             return;
+                                                         }
                                                          userModel.setMail(mail);
                                                          userPreference.setUserEmail(mail);
 
@@ -133,10 +128,13 @@ public class SignUpActivity extends Activity {
                                                      userModel.setPassW(edtPassW.getText().toString());
                                                      userPreference.setUserName(edtUsername.getText().toString());
                                                      userPreference.setPassword(edtPassW.getText().toString());
+                                                     userPreference.setUserSignInStatus(true);
                                                      userDatabaseHelper.addUser(userModel);
                                                      Log.i("Success", userModel.getSdt());
                                                      userPreference.setUserSignInStatus(true);
-
+                                                     Toast.makeText(SignUpActivity.this, "Successfuly !"+ userModel.getSdt(), Toast.LENGTH_SHORT).show();
+                                                     startActivity(new Intent(SignUpActivity.this, MainActivity.class));
+                                                     finish();
                                                  }
 
                                                  @Override
@@ -144,9 +142,7 @@ public class SignUpActivity extends Activity {
 
                                                  }
                                              });
-                Toast.makeText(this, "Successfuly !"+ userModel.getSdt(), Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(this, MainActivity.class));
-                finish();
+
 
             }
 
@@ -156,8 +152,7 @@ public class SignUpActivity extends Activity {
 
     public boolean isUsername( String user){
         String regex = "^[a-zA-Z_][a-zA-Z0-9_]*$";
-        return user.matches(regex);
-
+        return user.matches(regex) && user.length()>=6 ;
     }
     public  boolean isEmail(String email)
     {
@@ -168,5 +163,29 @@ public class SignUpActivity extends Activity {
     {
         String regex = "^(03[2-9]|07[0|1|2|6|8]|08[3|4|5|7|9]|05[6|8|9])([0-9]{7})$";
         return  phone.matches(regex);
+    }
+    public boolean validate() {
+        boolean valid = true;
+
+        String username = edtUsername.getText().toString();
+        String password = edtPassW.getText().toString();
+        if (TextUtils.isNullOrEmpty(username)) {
+            edtUsername.setError(getString(R.string.alert_enter_name));
+            valid = false;
+        } else  if (!isUsername(username)) {
+            edtUsername.setError(getString(R.string.alert_username_error));
+            valid = false;
+        } else {
+            edtUsername.setError(null);
+        }
+
+
+        if (!PasswordValidator.isPasswordLengthValid(password)) {
+            edtPassW.setError(getString(R.string.alert_password_error));
+            valid = false;
+        } else {
+            edtPassW.setError(null);
+        }
+        return valid;
     }
 }

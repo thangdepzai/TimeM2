@@ -38,6 +38,7 @@ public class SplashActivity extends AppCompatActivity implements Handler.Callbac
             finish();
         }else{
             startActivity(new Intent(SplashActivity.this, LoginActivity.class));
+            finish();
         }
         return false;
     }

@@ -1,4 +1,4 @@
-package hust.edu.vn.timem.Activity;
+package hust.edu.vn.timem.Utils;
 
 import android.widget.EditText;
 import android.widget.TextView;

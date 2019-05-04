@@ -14,7 +14,12 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.accountkit.Account;
+import com.facebook.accountkit.AccountKit;
+import com.facebook.accountkit.AccountKitCallback;
+import com.facebook.accountkit.AccountKitError;
 import com.facebook.accountkit.AccountKitLoginResult;
+import com.facebook.accountkit.PhoneNumber;
 import com.facebook.accountkit.ui.AccountKitActivity;
 import com.facebook.accountkit.ui.AccountKitConfiguration;
 import com.facebook.accountkit.ui.LoginType;
@@ -26,6 +31,8 @@ import hust.edu.vn.timem.Data.SQLiteUser;
 import hust.edu.vn.timem.Model.UserModel;
 import hust.edu.vn.timem.R;
 import hust.edu.vn.timem.UserPreference;
+import hust.edu.vn.timem.Utils.PasswordValidator;
+import hust.edu.vn.timem.Utils.TextUtils;
 
 public class LoginActivity extends Activity {
     Button btnPhoneLogin;
@@ -34,8 +41,7 @@ public class LoginActivity extends Activity {
     EditText edtUsername;
     TextView txtSignUp;
     private static final int REQUEST_CODE = 999;
-    boolean vaildUsername = false,  vaildPass = false;
-    TextView txtUserError,txtPassError;
+
     private SQLiteUser userDatabaseHelper;
     private UserPreference userPreference;
     @Override
@@ -49,8 +55,6 @@ public class LoginActivity extends Activity {
         edtPassW = findViewById(R.id.edtPassW);
         edtUsername = findViewById(R.id.edtUsername);
         txtSignUp = findViewById(R.id.txtSignUp);
-        txtUserError = findViewById(R.id.txtUserError);
-        txtPassError = findViewById(R.id.txtPassError);
         userDatabaseHelper = new SQLiteUser(this);
         userPreference = UserPreference.getUserPreference(this);
         txtSignUp.setOnClickListener(new View.OnClickListener() {
@@ -78,39 +82,23 @@ public class LoginActivity extends Activity {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(!validate()){
+                    return;
+                }
                 String user  = edtUsername.getText().toString();
                 String pass = edtPassW.getText().toString();
-                if(user.isEmpty()){
-                    txtUserError.setText("Vui lòng nhập tên đăng nhâp");
-                    vaildUsername = false;
-                }else {
-                    vaildUsername = true;
-                    txtUserError.setText("");
-                }
-                if(pass.isEmpty()){
-                    txtPassError.setText("Vui lòng nhập mật khẩu ");
-                    vaildPass = false;
-                }
-                else {
-                    vaildPass = true;
-                    txtPassError.setText("");
-                }
-                if(vaildPass && vaildUsername && userDatabaseHelper.checkUser(user, pass) ){
+
+                if( userDatabaseHelper.checkUser(user, pass) ){
                     UserModel userModel = userDatabaseHelper.getUser(user, pass);
                     userPreference.setUserName(user);
                     userPreference.setPassword(pass);
                     userPreference.setUserSdt(userModel.getSdt());
                     userPreference.setUserEmail(userModel.getMail());
                     userPreference.setUserSignInStatus(true);
-                    edtPassW.setText("");
-                   // check pass in firebase
-                    boolean vaild = true;
-                    if(vaild){
-                        Log.i("Success",userModel.getUserName()+ ", "+ userModel.getSdt()+", "+ userModel.getPassW() );
-                        startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                        finish();
-                    }else Toast.makeText(getApplicationContext(), "Sai username hoặc password", Toast.LENGTH_SHORT).show();
-                }
+                    Log.i("Success",userModel.getUserName()+ ", "+ userModel.getSdt()+", "+ userModel.getPassW() );
+                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                    finish();
+                }else Toast.makeText(getApplicationContext(), "Sai username hoặc password", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -118,8 +106,7 @@ public class LoginActivity extends Activity {
     }
     public boolean isUsername( String user){
         String regex = "^[a-zA-Z_][a-zA-Z0-9_]*$";
-        return user.matches(regex);
-
+        return user.matches(regex) && user.length()>=6;
     }
     public  boolean isEmail(String email)
     {
@@ -131,6 +118,15 @@ public class LoginActivity extends Activity {
         String regex = "^(03[2-9]|07[0|1|2|6|8]|08[3|4|5|7|9]|05[6|8|9])([0-9]{7})$";
         return  phone.matches(regex);
     }
+    private boolean isExists(String username) {
+        return userDatabaseHelper.checkUser(username);
+    }
+    private boolean isExistsSDT(String sdt){
+        return userDatabaseHelper.checkUserSDT(sdt);
+    }
+    private boolean isExistsEmail(String email){
+        return userDatabaseHelper.checkUserMail(email);
+    }
 
     private void startLoginPage(LoginType loginType) {
         Intent it = new Intent(this, AccountKitActivity.class);
@@ -141,6 +137,7 @@ public class LoginActivity extends Activity {
                 ); // use token when acess Bật quy trình mã truy cập khách hàng
         it.putExtra(AccountKitActivity.ACCOUNT_KIT_ACTIVITY_CONFIGURATION,config.build());
         startActivityForResult(it, REQUEST_CODE);
+
 
     }
 
@@ -158,8 +155,50 @@ public class LoginActivity extends Activity {
                 Toast.makeText(this, "Cancel", Toast.LENGTH_SHORT).show();
                 return;
             }else{
-                Toast.makeText(this, "Successfuly !", Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(this, MainActivity.class));
+                AccountKit.getCurrentAccount(new AccountKitCallback<Account>() {
+                    @Override
+                    public void onSuccess(Account account) {
+                        UserModel userModel = null;
+                        if(account.getPhoneNumber()!=null) {
+
+                            PhoneNumber phoneNumber = account.getPhoneNumber();
+                            String phoneNumberString = phoneNumber.toString();
+                            if(!isExistsSDT(phoneNumberString)){
+                                Toast.makeText(LoginActivity.this, "Số điện thoại chưa đăng ký", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                            Log.i("Success",phoneNumberString );
+                            userModel = userDatabaseHelper.getUserSDT(phoneNumberString);
+                        }
+
+                        if(account.getEmail()!=null){
+
+                            String mail = account.getEmail();
+                            if(! isExistsSDT(mail)){
+                                Toast.makeText(LoginActivity.this, "Email chưa đăng ký", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                            userModel = userDatabaseHelper.getUserMail(mail);
+
+                        }
+
+                        userPreference.setUserName(userModel.getUserName());
+                        userPreference.setPassword(userModel.getPassW());
+                        userPreference.setUserSdt(userModel.getSdt());
+                        userPreference.setUserEmail(userModel.getMail());
+                        userPreference.setUserSignInStatus(true);
+
+                        Toast.makeText(LoginActivity.this, "Successfuly !"+ userModel.getSdt(), Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                        finish();
+                    }
+
+                    @Override
+                    public void onError(AccountKitError accountKitError) {
+
+                    }
+                });
+
             }
 
         }
@@ -180,5 +219,25 @@ public class LoginActivity extends Activity {
             e.printStackTrace();
         }
 
+    }
+    public boolean validate() {
+        boolean valid = true;
+
+        String username = edtUsername.getText().toString();
+        String password = edtPassW.getText().toString();
+
+        if (TextUtils.isNullOrEmpty(username) || !isUsername(username)) {
+            edtUsername.setError(getString(R.string.alert_username_error));
+            valid = false;
+        } else {
+            edtUsername.setError(null);
+        }
+        if (!PasswordValidator.isPasswordLengthValid(password)) {
+            edtPassW.setError(getString(R.string.alert_password_length_error));
+            valid = false;
+        } else {
+            edtPassW.setError(null);
+        }
+        return valid;
     }
 }

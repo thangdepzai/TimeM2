@@ -12,31 +12,38 @@
         android:gravity="center"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <EditText
-            android:layout_gravity="center"
-            android:hint="Tên Đăng nhập"
-            android:id="@+id/edtUsername"
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp">
+            <EditText
+                android:layout_gravity="center"
+                android:hint="Username"
+                android:id="@+id/edtUsername"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content" />
+        </android.support.design.widget.TextInputLayout>
+        <!--<TextView-->
+        <!--android:textColor="#E53935"-->
+        <!--android:id="@+id/txtUserError"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content" />-->
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp">
 
-            android:layout_width="300dp"
-            android:layout_height="wrap_content" />
-        <TextView
-            android:textColor="#E53935"
-            android:id="@+id/txtUserError"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-        <EditText
-            android:layout_marginTop="15dp"
-            android:layout_gravity="center"
-            android:inputType="textPassword"
-            android:hint="Mật Khẩu"
-            android:id="@+id/edtPassW"
-            android:layout_width="300dp"
-            android:layout_height="wrap_content" />
-        <TextView
-            android:textColor="#E53935"
-            android:id="@+id/txtPassError"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            <EditText
+                android:layout_marginTop="10dp"
+                android:layout_gravity="center"
+                android:inputType="textPassword"
+                android:hint="Mật Khẩu"
+                android:id="@+id/edtPassW"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content" />
+        </android.support.design.widget.TextInputLayout>
         <Button
             android:layout_marginTop="20dp"
             android:layout_gravity="center"

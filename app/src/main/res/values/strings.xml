@@ -24,6 +24,69 @@
     <string name="choose_time">Choose time</string>
     <string name="choose_date">Choose date</string>
     <string name="choose_color">Choose color</string>
+    <!-- Strings related to login -->
+    <string name="alert_enter_name">Enter a user name</string>
+    <string name="alert_email_not_valid">Enter a valid email address</string>
+    <string name="alert_password_error">Password must be 6 to 21 characters </string>
+
+    <string name="alert_password_length_error">Password should contain minimum of 6 characters and maximum of 20 characters</string>
+    <string name="alert_password_digits_error">Password should contain at least one number</string>
+    <string name="alert_password_lowercase_error">Password should contain at least one character</string>
+    <string name="alert_password_uppercase_error">Password should contain at least one uppercase character</string>
+    <string name="alert_password_specials_error">Password should contain at least one special character</string>
+    <string name="alert_username_error">Username should only contain minimum of 6 chars, numbers, underlines and started by a char</string>
+
+    <string name="alert_password_mismatch">Password do not match</string>
+
+    <string name="creating_account">Creating Account...</string>
+    <string name="email_already_exists">Email Already Exists</string>
+    <string name="sign_on_success">Create a count successfully</string>
+    <string name="login_failed">Incorrect username or password</string>
+    <string name="login_success">Login success</string>
+    <string name="authenticating">Authenticating...</string>
+
+    <string name="name">Name</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="login">Login</string>
+    <string name="sign_on">Sign On</string>
+    <string name="not_a_member">Not a member?</string>
+    <string name="already_registered">Already registered?</string>
+    <string name="title_activity_notes_list">NotesListActivity</string>
+
+    <string name="logout">LogOut</string>
+    <string name="search">Search</string>
+    <string name="app_sign_in">Sign In</string>
+    <string name="title">Title</string>
+    <string name="content">Content</string>
+    <string name="description">Description</string>
+    <string name="note_hint">1. Click a note to view and edit \n 2. Swipe left/right to delete a note</string>
+    <string name="add_note">Add Note</string>
+    <string name="edit_note">Edit Note</string>
+    <string name="done">Done</string>
+    <!-- Navigation Drawer menu labels -->
+    <string name="nav_home">Home</string>
+    <string name="nav_photos">Photos</string>
+    <string name="nav_movies">Movies</string>
+    <string name="nav_notifications">Notifications</string>
+    <string name="nav_settings">Settings</string>
+    <string name="nav_about_us">About Us</string>
+
+    <!-- Toolbar titles when navigation menu item is selected -->
+    <string-array name="nav_item_activity_titles">
+        <item>Home</item>
+        <item>Photos</item>
+        <item>Movies</item>
+        <item>Notifications</item>
+        <item>Settings</item>
+    </string-array>
+    <string name="activity_title_about_us">About Us</string>
+    <string name="activity_title_privacy_policy">Privacy Policy</string>
+    <string name="action_clear_all">Clear All</string>
+    <string name="action_logout">Logout</string>
+    <string name="action_mark_all_read">Mark All as Read</string>
+    <string name="privacy_policy">Privacy Policy</string>
     <string-array name="header_title">
         <item></item>
         <item>Mon</item>
@@ -52,27 +115,7 @@
         <item>T5</item>
         <item>T6</item>
     </string-array>
-    <string-array name="time_table_hours">
-        <item>09:00</item>
-        <item>09:30</item>
-        <item>10:00</item>
-        <item>10:30</item>
-        <item>11:00</item>
-        <item>11:30</item>
-        <item>12:00</item>
-        <item>12:30</item>
-        <item>13:00</item>
-        <item>13:30</item>
-        <item>14:00</item>
-        <item>14:30</item>
-        <item>15:00</item>
-        <item>15:30</item>
-        <item>16:00</item>
-        <item>16:30</item>
-        <item>17:00</item>
-        <item>17:30</item>
-        <item>18:00</item>
-    </string-array>
+
 
     <string-array name="tiet_hoc">
         <item>1</item>

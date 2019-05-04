@@ -11,11 +11,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import hust.edu.vn.timem.Activity.NoteActivity;
 import hust.edu.vn.timem.Data.SQLiteNote;
 import hust.edu.vn.timem.Holder.BaseHolder;
 import hust.edu.vn.timem.Model.NoteModel;
@@ -59,30 +62,64 @@ public class BaseAdapter extends RecyclerView.Adapter<BaseHolder> {
 
                 final EditText edt_title;
                 final EditText edt_mota;
+                final ImageView mic_title;
+                final ImageView mic_mota;
 
                 Button btn_cancel;
                 Button btn_save;
                 edt_title = dialog.findViewById(R.id.edt_title);
                 edt_mota = dialog.findViewById(R.id.edt_mota);
+                mic_mota = dialog.findViewById(R.id. mic_mota);
+                mic_title = dialog.findViewById(R.id.mic_title);
 
                 edt_title.setText(object_list.get(i).title);
                 edt_mota.setText(object_list.get(i).mota);
+
+                mic_mota.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        ((NoteActivity)context).startSpeechToText(NoteActivity.SPEECH_MOTA_RECOGNITION_CODE, edt_mota);
+                    }
+                });
+                mic_title.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        ((NoteActivity)context).startSpeechToText(NoteActivity.SPEECH_TITLE_RECOGNITION_CODE, edt_title);
+
+                    }
+                });
+
+
+
+
 
                 btn_cancel= dialog.findViewById(R.id.cancel);
                 btn_save = dialog.findViewById(R.id.save);
                 btn_save.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        if(! edt_title.getText().toString().equals("")) {
+                            String mota = edt_mota.getText().toString();
+                            String title = edt_title.getText().toString();
+                            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss, dd-MM-yyyy");
+                            String time_now = sdf.format(new Date());
+                            // update view
 
-                        baseHolder.txt_title.setText(edt_title.getText().toString());
-                        baseHolder.txt_mota.setText(edt_mota.getText().toString());
-                        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss, dd-MM-yyyy");
-                        String time_now = sdf.format(new Date());
-                        baseHolder.txt_time.setText(time_now);
+                            baseHolder.txt_title.setText(title);
+                            baseHolder.txt_mota.setText(mota);
+                            baseHolder.txt_time.setText(time_now);
+                            // update object
+                            object_list.get(i).time = time_now;
+                            object_list.get(i).mota = mota;
+                            object_list.get(i).title = title;
+                            // update database
+                            SQLiteNote db_note = new SQLiteNote(context);
+                            NoteModel model = new NoteModel(object_list.get(i).id, time_now, title, mota);
+                            db_note.update(model, object_list.get(i).id);
 
-//                        SQLiteNote db_note = new SQLiteNote(getApplicationContext());
-////                        db_note.addData(time_now, edt_title.getText().toString(), edt_mota.getText().toString());
-////                        DataItem();
+                        }else{
+                            Toast.makeText(context, "Thất bại ! Tiêu đề phải khác rỗng ! ", Toast.LENGTH_SHORT).show();
+                        }
                         dialog.dismiss();
 
                     }
@@ -111,9 +148,10 @@ public class BaseAdapter extends RecyclerView.Adapter<BaseHolder> {
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which){
                             case DialogInterface.BUTTON_POSITIVE:
+                                // xoa database
                                 SQLiteNote db_note = new SQLiteNote(context);
-                                db_note.deleteItemSelected(object_list.get(i).time);
-                                //db_note.getData();
+                                db_note.deleteItemKey(object_list.get(i).id);
+                                //cap nhat giao dien
                                 object_list.remove(i);
                                 notifyItemRemoved(i);
                                 notifyItemRangeChanged(i, object_list.size());

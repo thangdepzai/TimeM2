@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import hust.edu.vn.timem.Model.CourseModel;
+import hust.edu.vn.timem.UserPreference;
 
 public class SQLiteTimeTable  extends SQLiteOpenHelper {
 
@@ -20,22 +21,10 @@ public class SQLiteTimeTable  extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;
 
     // Nama Database
-    private static final String DATABASE_NAME = "TimeTableManager.db";
+    private static final String DATABASE_NAME = "TimeTableManager";
 
     // Nama Table
     private static final String TABLE_TIMETABLE = "timetable";
-
-    private String uid;
-    private String cname;
-    private String schoolYear;
-    private String term;
-    private float credit;
-    private int startSection;
-    private int endSection;
-    private int startWeek;
-    private int endWeek;
-    private int dayOfWeek;
-    private String classroom;
 
     public static final String KEY_UID= "uid";
     public static final String KEY_NAME = "cname";
@@ -50,7 +39,7 @@ public class SQLiteTimeTable  extends SQLiteOpenHelper {
     public static final String KEY_CLASS_ROOM = "classroom";
 
     public SQLiteTimeTable(Context context) {
-        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        super(context, DATABASE_NAME+ ""+UserPreference.getUserPreference(context).getUserName(), null, DATABASE_VERSION);
     }
 
     @Override

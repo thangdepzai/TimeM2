@@ -23,7 +23,7 @@ public class SQLiteNote extends SQLiteOpenHelper {
         private static final int DATABASE_VERSION = 1;
 
         // Nama Database
-        private static  String DATABASE_NAME = "sttnf_result";
+        private static  String DATABASE_NAME = "notes";
 
         // Nama Table
         private static final String TABLE_NOTE = "tbl_note_daeng";
@@ -33,6 +33,7 @@ public class SQLiteNote extends SQLiteOpenHelper {
         public static final String KEY_TIME = "time";
         public static final String KEY_TITLE = "title";
         public static final String KEY_MOTA = "mota";
+        public static final String KEY_URL = "url";
 
 
     public SQLiteNote(Context context) {
@@ -47,7 +48,8 @@ public class SQLiteNote extends SQLiteOpenHelper {
                 + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
                 + KEY_TIME + " TEXT,"
                 + KEY_TITLE + " TEXT,"
-                + KEY_MOTA+ " TEXT"
+                + KEY_MOTA+ " TEXT,"
+                + KEY_URL+" TEXT"
                + ")";
         sqLiteDatabase.execSQL(CREATE_LOGIN_TABLE);
         Log.i(TAG, "da tao xong bang");
@@ -59,7 +61,7 @@ public class SQLiteNote extends SQLiteOpenHelper {
         onCreate(sqLiteDatabase);
     }
 
-    public void addData(String time, String title, String mota) {
+    public void addData(String time, String title, String mota, String url) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         if (!CheckData(title)) {
@@ -67,6 +69,7 @@ public class SQLiteNote extends SQLiteOpenHelper {
             values.put(KEY_TIME, time);
             values.put(KEY_TITLE, title);
             values.put(KEY_MOTA, mota);
+            values.put(KEY_URL, url);
 
 
             db.insert(TABLE_NOTE, null, values);
@@ -98,7 +101,7 @@ public class SQLiteNote extends SQLiteOpenHelper {
                     itemObject.time = cursor.getString(cursor.getColumnIndex(KEY_TIME));
                     itemObject.title = cursor.getString(cursor.getColumnIndex(KEY_TITLE));
                     itemObject.mota = cursor.getString(cursor.getColumnIndex(KEY_MOTA));
-
+                    itemObject.urlImage  = cursor.getString(cursor.getColumnIndex(KEY_URL));
                     usersdetail.add(itemObject);
                 } while (cursor.moveToNext());
             }
@@ -142,6 +145,7 @@ public class SQLiteNote extends SQLiteOpenHelper {
         values.put(KEY_TIME, model.time);
         values.put(KEY_TITLE, model.title);
         values.put(KEY_MOTA, model.mota);
+        values.put(KEY_URL, model.urlImage);
         db.update(TABLE_NOTE, values, KEY_ID + " = ?",
                 new String[]{String.valueOf(key_note)});
         db.close();

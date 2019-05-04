@@ -37,7 +37,7 @@
                 android:id="@+id/img_note"
                 android:layout_width="match_parent"
                 android:layout_height="137dp"
-
+                android:visibility="gone"
                 android:layout_weight="3"
                 android:scaleType="fitXY"
                 android:src="@drawable/image_test" />

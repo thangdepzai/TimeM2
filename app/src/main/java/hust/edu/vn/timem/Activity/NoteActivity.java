@@ -2,10 +2,15 @@ package hust.edu.vn.timem.Activity;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.ActivityNotFoundException;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.ContactsContract;
+import android.provider.MediaStore;
 import android.speech.RecognizerIntent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -17,17 +22,23 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.Toast;
 
+import java.io.File;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
-import hust.edu.vn.timem.Adapter.BaseAdapter;
+import hust.edu.vn.timem.Adapter.BaseRecycleViewAdapter;
+import hust.edu.vn.timem.Adapter.ImageListAdapter;
 import hust.edu.vn.timem.Data.SQLiteNote;
 import hust.edu.vn.timem.R;
 
@@ -35,11 +46,18 @@ public class NoteActivity extends AppCompatActivity {
 
     FloatingActionButton btn_add_note;
     ImageButton btn_filter;
-
+    //private List<String> listOfImagesPath;
     View edt;
     RecyclerView lst_note;
+//    ImageView  img;
+    LinearLayout lst_image;
+    String url="";
+    String comment="";
+//    List<EditText> lst_edt;
     public static final int SPEECH_MOTA_RECOGNITION_CODE = 1;
     public static final int SPEECH_TITLE_RECOGNITION_CODE = 2;
+    public static final int REQUEST_GALLERY = 3;
+    public static final int REQUEST_CAMERA = 4;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_note);
@@ -83,22 +101,59 @@ public class NoteActivity extends AppCompatActivity {
                 final EditText edt_mota;
                 final ImageView mic_mota;
                 final ImageView mic_title;
+                final ImageView img_attack;
+                final ImageView img_content;
+                final GridView  grid_image;
+//                listOfImagesPath = new ArrayList<>();
 
                 Button btn_cancel;
                 Button btn_save;
-                AlertDialog.Builder dialogBuilder =	new AlertDialog.Builder(NoteActivity.this);
+                AlertDialog.Builder dialogBuilder =	new AlertDialog.Builder(NoteActivity.this, R.style.my_dialog);
                 LayoutInflater inflater	= NoteActivity.this.getLayoutInflater();
-                @SuppressLint("ResourceType")
-                View dialogView	=	inflater.inflate(R.layout.activity_add_note, (ViewGroup)findViewById(R.layout.activity_note));
+                @SuppressLint("ResourceType") final View dialogView	=	inflater.inflate(R.layout.activity_add_note, (ViewGroup)findViewById(R.layout.activity_note));
                 edt_title = dialogView.findViewById(R.id.edt_title);
                 edt_mota = dialogView.findViewById(R.id.edt_mota);
                 mic_mota = dialogView.findViewById(R.id.mic_mota);
                 mic_title = dialogView.findViewById(R.id.mic_title);
+                lst_image = dialogView.findViewById(R.id.lst_image);
+                url = "";
+                comment="";
+//                lst_edt = new ArrayList<>();
+//                img_content = dialogView.findViewById(R.id.img_content);
+//                grid_image=  dialogView.findViewById(R.id.grid_image);
+//                grid_image.setAdapter(new ImageListAdapter(NoteActivity.this,listOfImagesPath));
+                img_attack = dialogView.findViewById(R.id.img_attack);
+                img_attack.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(NoteActivity.this);
+                        alertDialogBuilder.setTitle("Choose a source...");
+                        alertDialogBuilder.setItems(new CharSequence[]{"Gallery", "Camera"}, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                switch (which) {
+                                    case 0:
+                                        Intent galleryIntent = new Intent(Intent.ACTION_GET_CONTENT,
+                                                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                                        galleryIntent.setType("image/*");
+                                        startActivityForResult(galleryIntent, REQUEST_GALLERY);
+                                        break;
+                                    case 1:
+                                        Intent camera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                                        saveImage(camera);
+                                        startActivityForResult(camera, REQUEST_CAMERA);
+                                        break;
+                                }
+                            }
+                        });
+                        alertDialogBuilder.show();
+                    }
+                });
 
                 dialogBuilder.setView(dialogView);
                 dialogBuilder.setTitle("Add note");
                 final AlertDialog b = dialogBuilder.create();
-
+                b.setCancelable(false);
                 btn_cancel= dialogView.findViewById(R.id.cancel);
                 btn_save = dialogView.findViewById(R.id.save);
                 mic_mota.setOnClickListener(new View.OnClickListener() {
@@ -121,11 +176,20 @@ public class NoteActivity extends AppCompatActivity {
                             SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss, dd-MM-yyyy");
                             String time_now = sdf.format(new Date());
                             SQLiteNote db_note = new SQLiteNote(getApplicationContext());
-                            db_note.addData(time_now, edt_title.getText().toString(), edt_mota.getText().toString());
+//                            String comment="";
+//
+//                            for(EditText e: lst_edt){
+//                                comment=comment+";"+e.getText().toString();
+//                            }
+//                            url= url+","+comment;
+                            db_note.addData(time_now, edt_title.getText().toString(), edt_mota.getText().toString(), url);
                             DataItem();
                         }else Toast.makeText(NoteActivity.this, "Thất bại ! Tiêu đề phải khác rỗng ! ", Toast.LENGTH_SHORT).show();
 
                         b.dismiss();
+//                        lst_edt.clear();
+                        lst_image.removeAllViews();
+
                     }
                 });
                 btn_cancel.setOnClickListener(new View.OnClickListener() {
@@ -133,10 +197,13 @@ public class NoteActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         // TODO Auto-generated method stub
+                        lst_image.removeAllViews();
+//                        lst_edt.clear();
                         b.dismiss();
                     }
                 });
                 b.show();
+
 
             }
 
@@ -185,29 +252,48 @@ public class NoteActivity extends AppCompatActivity {
                     ((EditText)edt).setText(text);
                 }
                 break;
+            case REQUEST_GALLERY:
+                if (resultCode == RESULT_OK&& null != data) {
+                    Uri selectedImage = data.getData();
+                    ImageView img = new ImageView(NoteActivity.this);
+                    img.setImageURI(selectedImage);
+                    if(url.equals("")){
+                        url = selectedImage+"";
+                    }else  url = url+";"+selectedImage;
+//                    EditText txt = new EditText(NoteActivity.this);
+//                    txt.setHint("comment");
+//                    lst_image.addView(txt);
+                    lst_image.addView(img);
+//                    lst_edt.add(txt);
+                }
+                break;
+            case REQUEST_CAMERA:
+                if (resultCode == RESULT_OK&& null != data) {
+                    Bitmap photo = (Bitmap) data.getExtras().get("data");
+                    ImageView img = new ImageView(NoteActivity.this);
+                    img.setImageBitmap(photo);
+//                    EditText txt = new EditText(NoteActivity.this);
+//                    txt.setHint("comment");
+//                    lst_image.addView(txt);
+                    lst_image.addView(img);
+//                    lst_edt.add(txt);
+                }
+                break;
         }
     }
-
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        getMenuInflater().inflate(R.menu.menu_note, menu);
-//        return super.onCreateOptionsMenu(menu);
-//    }
-
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        switch (item.getItemId()) {
-//            case R.id.mn_refresh:
-//                DataItem();
-//                break;
-//        }
-//        return super.onOptionsItemSelected(item);
-//    }
+    public void saveImage(Intent camera){
+        File dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd|hh:mm:ss");
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+        String name = "CameraTemp".concat(sdf.format(timestamp)).concat(".jpeg");
+        File output = new File(dir, name);
+        camera.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(output));
+    }
 
 
     private void DataItem() {
         SQLiteNote db_note = new SQLiteNote(this);
-        BaseAdapter adapter = new BaseAdapter(this, db_note.getData());
+        BaseRecycleViewAdapter adapter = new BaseRecycleViewAdapter(this, db_note.getData());
         adapter.notifyDataSetChanged();
         lst_note.setAdapter(adapter);
 

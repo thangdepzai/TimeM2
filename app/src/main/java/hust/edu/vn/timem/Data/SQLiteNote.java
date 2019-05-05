@@ -82,9 +82,9 @@ public class SQLiteNote extends SQLiteOpenHelper {
                 db.setTransactionSuccessful();
             } finally {
                 db.endTransaction();
+                db.close();
             }
         }
-
         db.close();
     }
 
@@ -111,6 +111,7 @@ public class SQLiteNote extends SQLiteOpenHelper {
             if (cursor != null && !cursor.isClosed()) {
                 cursor.close();
             }
+            db.close();
         }
         return usersdetail;
     }
@@ -124,6 +125,7 @@ public class SQLiteNote extends SQLiteOpenHelper {
             return false;
         }
         cursor.close();
+        sqldb.close();
         return true;
     }
 
@@ -137,6 +139,7 @@ public class SQLiteNote extends SQLiteOpenHelper {
             Log.d(TAG, "Error while trying to delete  users detail");
         } finally {
             db.endTransaction();
+            db.close();
         }
     }
     public void update(NoteModel model, int key_note) {

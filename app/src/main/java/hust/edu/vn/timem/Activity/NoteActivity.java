@@ -1,21 +1,30 @@
 package hust.edu.vn.timem.Activity;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.speech.RecognizerIntent;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -29,7 +38,10 @@ import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+
 import java.io.File;
+import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -53,19 +65,24 @@ public class NoteActivity extends AppCompatActivity {
     LinearLayout lst_image;
     String url="";
     String comment="";
+    String uricamera="";
 //    List<EditText> lst_edt;
     public static final int SPEECH_MOTA_RECOGNITION_CODE = 1;
     public static final int SPEECH_TITLE_RECOGNITION_CODE = 2;
     public static final int REQUEST_GALLERY = 3;
     public static final int REQUEST_CAMERA = 4;
+    public static final int MY_REQUEST_CODE_CAMERA_PERMISSION = 100;
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_note);
         lst_note = findViewById(R.id.lst_note);
         btn_add_note = findViewById(R.id.btn_add_note);
         btn_filter = findViewById(R.id.btn_filter);
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
-        lst_note.setLayoutManager(gridLayoutManager);
+        StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL);
+//        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
+        lst_note.setLayoutManager(staggeredGridLayoutManager);
+
         DataItem();
         btn_filter.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -109,6 +126,7 @@ public class NoteActivity extends AppCompatActivity {
                 Button btn_cancel;
                 Button btn_save;
                 AlertDialog.Builder dialogBuilder =	new AlertDialog.Builder(NoteActivity.this, R.style.my_dialog);
+                dialogBuilder.setTitle("Add note");
                 LayoutInflater inflater	= NoteActivity.this.getLayoutInflater();
                 @SuppressLint("ResourceType") final View dialogView	=	inflater.inflate(R.layout.activity_add_note, (ViewGroup)findViewById(R.layout.activity_note));
                 edt_title = dialogView.findViewById(R.id.edt_title);
@@ -118,6 +136,7 @@ public class NoteActivity extends AppCompatActivity {
                 lst_image = dialogView.findViewById(R.id.lst_image);
                 url = "";
                 comment="";
+                 uricamera="";
 //                lst_edt = new ArrayList<>();
 //                img_content = dialogView.findViewById(R.id.img_content);
 //                grid_image=  dialogView.findViewById(R.id.grid_image);
@@ -139,9 +158,7 @@ public class NoteActivity extends AppCompatActivity {
                                         startActivityForResult(galleryIntent, REQUEST_GALLERY);
                                         break;
                                     case 1:
-                                        Intent camera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                                        saveImage(camera);
-                                        startActivityForResult(camera, REQUEST_CAMERA);
+                                        checksCameraPermission();
                                         break;
                                 }
                             }
@@ -149,9 +166,7 @@ public class NoteActivity extends AppCompatActivity {
                         alertDialogBuilder.show();
                     }
                 });
-
                 dialogBuilder.setView(dialogView);
-                dialogBuilder.setTitle("Add note");
                 final AlertDialog b = dialogBuilder.create();
                 b.setCancelable(false);
                 btn_cancel= dialogView.findViewById(R.id.cancel);
@@ -188,7 +203,6 @@ public class NoteActivity extends AppCompatActivity {
 
                         b.dismiss();
 //                        lst_edt.clear();
-                        lst_image.removeAllViews();
 
                     }
                 });
@@ -197,12 +211,19 @@ public class NoteActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         // TODO Auto-generated method stub
-                        lst_image.removeAllViews();
+
 //                        lst_edt.clear();
                         b.dismiss();
                     }
                 });
                 b.show();
+                b.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        lst_image.removeAllViews();
+                        lst_image.removeAllViewsInLayout();
+                    }
+                });
 
 
             }
@@ -213,7 +234,12 @@ public class NoteActivity extends AppCompatActivity {
 
     }
 
-
+    public void takePicture(){
+//        Intent camera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//        saveImage(camera);
+//        startActivityForResult(camera, REQUEST_CAMERA);
+        Toast.makeText(NoteActivity.this, "App hasn't yet support capture image by camera!", Toast.LENGTH_SHORT).show();
+    }
 
     public void startSpeechToText(int code, View v) {
         this.edt = v;
@@ -256,27 +282,38 @@ public class NoteActivity extends AppCompatActivity {
                 if (resultCode == RESULT_OK&& null != data) {
                     Uri selectedImage = data.getData();
                     ImageView img = new ImageView(NoteActivity.this);
-                    img.setImageURI(selectedImage);
+                    try {
+                        Glide
+                                .with(NoteActivity.this)
+                                .load(selectedImage)
+                                .into(img);
+                    } catch (Exception e) {
+                        Log.i("IMAGE", "Loi load anh tu gallery " + e);
+                    }
                     if(url.equals("")){
                         url = selectedImage+"";
                     }else  url = url+";"+selectedImage;
-//                    EditText txt = new EditText(NoteActivity.this);
-//                    txt.setHint("comment");
-//                    lst_image.addView(txt);
+
                     lst_image.addView(img);
 //                    lst_edt.add(txt);
                 }
                 break;
             case REQUEST_CAMERA:
                 if (resultCode == RESULT_OK&& null != data) {
-                    Bitmap photo = (Bitmap) data.getExtras().get("data");
-                    ImageView img = new ImageView(NoteActivity.this);
-                    img.setImageBitmap(photo);
-//                    EditText txt = new EditText(NoteActivity.this);
-//                    txt.setHint("comment");
-//                    lst_image.addView(txt);
-                    lst_image.addView(img);
-//                    lst_edt.add(txt);
+                    //Bitmap photo = (Bitmap) data.getExtras().get("data");
+                    Uri photo = Uri.parse(uricamera);
+                    try {
+                        ImageView img = new ImageView(NoteActivity.this);
+                        Glide
+                                .with(NoteActivity.this)
+                                .load(photo)
+                                .into(img);
+                        lst_image.addView(img);
+                    } catch (Exception e) {
+                        Log.i("CAMERA", "Loi load anh tu camera " + e);
+                    }
+
+////                    lst_edt.add(txt);
                 }
                 break;
         }
@@ -287,7 +324,12 @@ public class NoteActivity extends AppCompatActivity {
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         String name = "CameraTemp".concat(sdf.format(timestamp)).concat(".jpeg");
         File output = new File(dir, name);
-        camera.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(output));
+        Uri uri = Uri.fromFile(output);
+        uricamera=uri+"";
+        if(url.equals("")) url = uri+"";
+        else url = url+";"+uri;
+        Log.i("CAMERA", url);
+        camera.putExtra(MediaStore.EXTRA_OUTPUT,uri);
     }
 
 
@@ -297,5 +339,75 @@ public class NoteActivity extends AppCompatActivity {
         adapter.notifyDataSetChanged();
         lst_note.setAdapter(adapter);
 
+    }
+    public String getRealPathFromURI(Uri uri) {
+        if (uri == null) {
+            return null;
+        }
+        String[] projection = {MediaStore.Images.Media.DATA};
+        Cursor cursor = NoteActivity.this.getContentResolver().query(uri, projection, null, null, null);
+        if (cursor != null) {
+            int column_index = cursor
+                    .getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            cursor.moveToFirst();
+            return cursor.getString(column_index);
+        }
+        return uri.getPath();
+    }
+    public void checksCameraPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            Log.d("MyApp", "SDK >= 23");
+            if (this.checkSelfPermission(Manifest.permission.CAMERA)
+                    != PackageManager.PERMISSION_GRANTED) {
+                Log.d("MyApp", "Request permission");
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.CAMERA},
+                        MY_REQUEST_CODE_CAMERA_PERMISSION);
+
+//                if (! shouldShowRequestPermissionRationale(Manifest.permission.CAMERA)) {
+//                    showMessageOKCancel("You need to allow camera usage",
+//                            new DialogInterface.OnClickListener() {
+//                                @Override
+//                                public void onClick(DialogInterface dialog, int which) {
+//                                    ActivityCompat.requestPermissions(NoteActivity.this, new String[] {Manifest.permission.CAMERA},
+//                                            MY_REQUEST_CODE_CAMERA_PERMISSION);
+//                                }
+//                            });
+//                }
+            }
+            else {
+                Log.d("MyApp", "Permission granted: taking pic");
+                takePicture();
+            }
+        }
+        else {
+            Log.d("MyApp", "Android < 6.0");
+            Toast.makeText(NoteActivity.this, "Camera don't support this divice!", Toast.LENGTH_SHORT).show();
+        }
+    }
+    private void showMessageOKCancel(String message, DialogInterface.OnClickListener okListener) {
+        new AlertDialog.Builder(this)
+                .setMessage(message)
+                .setPositiveButton("OK", okListener)
+                .setNegativeButton("Cancel", null)
+                .create()
+                .show();
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MY_REQUEST_CODE_CAMERA_PERMISSION: {
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    takePicture();
+
+                } else {
+                    Toast.makeText(this, "You did not allow camera usage :(", Toast.LENGTH_SHORT).show();
+
+                }
+                return;
+            }
+        }
     }
 }

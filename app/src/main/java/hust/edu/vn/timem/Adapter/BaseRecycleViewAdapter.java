@@ -17,6 +17,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+
 import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -64,11 +66,17 @@ public class BaseRecycleViewAdapter extends RecyclerView.Adapter<BaseHolder> {
 //        Log.i("URL", list_url.length+" "+comment.length +""+url);
 //        Log.i("URL", ds.length+"");
         final String [] list_url = url.split(";",-1);
-        if(list_url.length>0){
-            baseHolder.img_note.setVisibility(View.VISIBLE);
+        if(list_url.length>0 && !list_url[0].equals("")){
             Uri uri = Uri.parse(list_url[0]);
-            baseHolder.img_note.setImageURI(null);
-            baseHolder.img_note.setImageURI(uri);
+            try {
+                baseHolder.img_note.setVisibility(View.VISIBLE);
+                Glide
+                        .with(context)
+                        .load(uri)
+                        .into(baseHolder.img_note);
+            } catch (Exception e) {
+                Log.i("IMAGE", "Loi load anh tu gallery " + e);
+            }
         }else baseHolder.img_note.setVisibility(View.GONE);
 
         baseHolder.card_item_note.setOnClickListener(new View.OnClickListener() {
@@ -93,23 +101,31 @@ public class BaseRecycleViewAdapter extends RecyclerView.Adapter<BaseHolder> {
                 lst_image = dialog.findViewById(R.id.lst_image);
                 edt_title.setText(object_list.get(i).title);
                 edt_mota.setText(object_list.get(i).mota);
-                for(int j=0;j<list_url.length;j++){
-                    String s = list_url[j];
+                final String[] list_urli = object_list.get(i).getUrlImage().split(";",-1);
+                if(list_urli.length>0 && !list_urli[0].equals("")){
+                    for(int j=0;j<list_urli.length;j++){
+
+                        String s = list_urli[j];
 //                    String c = comment[j];
-                    Uri uri = Uri.parse(s);
-                    ImageView img = new ImageView(context);
-                    img.setImageURI(uri);
-                    EditText txt = new EditText(context);
+                        Uri uri = Uri.parse(s);
+                        ImageView img = new ImageView(context);
+                        try {
+                            Glide
+                                    .with(context)
+                                    .load(uri)
+                                    .into(img);
+                            lst_image.addView(img);
+                        } catch (Exception e) {
+                            Log.e("IMAGE", "Loi load anh tu gallery " + e);
+                        }
+
+//                    EditText txt = new EditText(context);
 //                    if(c.equals("")){
 //                        txt.setHint("no comment");
 //                    }else txt.setText(c);
 //                    lst_image.addView(txt);
-                    lst_image.addView(img);
+                    }
                 }
-                for(String s:list_url){
-
-                }
-
                 mic_mota.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -155,7 +171,6 @@ public class BaseRecycleViewAdapter extends RecyclerView.Adapter<BaseHolder> {
                         }else{
                         Toast.makeText(context, "Thất bại ! Tiêu đề phải khác rỗng ! ", Toast.LENGTH_SHORT).show();
                     }
-                        lst_image.removeAllViews();
                         dialog.dismiss();
 
                     }
@@ -165,12 +180,20 @@ public class BaseRecycleViewAdapter extends RecyclerView.Adapter<BaseHolder> {
                     @Override
                     public void onClick(View v) {
                         // TODO Auto-generated method stub
-                        lst_image.removeAllViews();
+
                         dialog.dismiss();
 
                     }
                 });
                 dialog.show();
+                dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        lst_image.removeAllViews();
+                        lst_image.removeAllViewsInLayout();
+
+                    }
+                });
 
             }
 

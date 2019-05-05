@@ -1,7 +1,10 @@
 # TimeM2
 Project Tương Tác Người Máy
+
 App Quản Lý thời gian
+
 App có các chưc năng chính:
+
 1. TKB: Xem , tạo, xóa thời khóa biểu
 2. Note : Xem, tạo note, xóa note, lọc note theo các filter . Note có thêm bằng giọng nói, thêm hình ảnh
 3. Event calendar: Xem và tạo các sự kiện (nhắc nhở)

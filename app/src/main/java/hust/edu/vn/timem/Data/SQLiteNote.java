@@ -153,6 +153,15 @@ public class SQLiteNote extends SQLiteOpenHelper {
                 new String[]{String.valueOf(key_note)});
         db.close();
     }
+    public int count(){
+        String USER_DETAIL_SELECT_QUERY = "SELECT * FROM " + TABLE_NOTE;
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery(USER_DETAIL_SELECT_QUERY, null);
+        int c = cursor.getCount();;
+        cursor.close();
+        db.close();
+        return c;
+    }
 
 
 }

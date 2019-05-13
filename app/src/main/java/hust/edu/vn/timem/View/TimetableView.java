@@ -386,6 +386,8 @@ public class TimetableView extends ViewGroup {
     public interface OnCourseItemClickListener {
         void onCourseItemClick(CourseModel course);
     }
+
+
     public interface OnCourseItemLongClickListener {
         boolean onCourseItemLongClick(CourseModel course);
     }

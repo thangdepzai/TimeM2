@@ -10,7 +10,6 @@
     </style>
     <style name="Theme_Dialog" parent="Theme.AppCompat.Light.Dialog">
         <item name="android:windowMinWidthMajor">100%</item>
-        <item name="android:windowMinWidthMajor">100%</item>
         <item name="android:windowNoTitle">false</item>
     </style>
     <style name="my_dialog" parent="Theme.AppCompat.Dialog.Alert">

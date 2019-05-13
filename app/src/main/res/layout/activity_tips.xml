@@ -6,16 +6,102 @@
     android:orientation="vertical"
     android:layout_height="match_parent"
     tools:context=".Activity.TipsActivity">
+    <android.support.constraint.ConstraintLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="60dp">
+
+        <TextView
+            android:id="@+id/txtTopBar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/bg"
+            android:gravity="center"
+            android:textSize="20sp"
+            android:fontFamily="@font/mm"
+            android:text="Tip "
+            android:textColor="#FFFF"
+            />
+
+
+    </android.support.constraint.ConstraintLayout>
+    <LinearLayout
+        android:layout_marginTop="25dp"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_marginLeft="16dp"
+            android:textSize="20sp"
+            android:text="Tra lịch âm dương"
+            android:textColor="#009688"
+            android:textStyle="bold"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+        <LinearLayout
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:weightSum="5"
+            android:orientation="horizontal"
+            android:layout_marginTop="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="30dp">
+            <TextView
+                android:id="@+id/txt_duong_lich"
+                android:background="@drawable/shape_row"
+                android:gravity="center"
+                android:hint="Duong lich"
+                android:layout_weight="2"
+                android:layout_width="0dp"
+                android:layout_height="match_parent" />
+            <ImageView
+                android:id="@+id/img_tran"
+                android:src="@drawable/ic_arrow_forward_blue_24dp"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent" />
+            <TextView
+                android:id="@+id/txt_am_lich"
+                android:background="@drawable/shape_row"
+                android:gravity="center"
+                android:hint="Am lich"
+                android:layout_weight="2"
+                android:layout_width="0dp"
+                android:layout_height="match_parent" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+
+        android:orientation="vertical"
+        android:layout_marginTop="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
     <TextView
-        android:text="Tra lich am duong"
+        android:textSize="20sp"
+        android:textColor="#009688"
+        android:textStyle="bold"
+        android:layout_marginLeft="16dp"
+        android:text="Tra thông tin thời tiết theo thành phố"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/vpPager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        </android.support.v4.view.ViewPager>
+    </LinearLayout>
+
+
     <TextView
-        android:text="Tra thong tin thoi tiet theo thanh pho"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-    <TextView
-        android:text="Tin hot hom nay"
+        android:layout_marginLeft="16dp"
+        android:textSize="20sp"
+        android:layout_marginTop="16dp"
+        android:textColor="#009688"
+        android:textStyle="bold"
+        android:text="Tin hot hôm nay"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

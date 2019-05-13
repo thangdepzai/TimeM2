@@ -19,6 +19,7 @@ public class UserPreference {
     private static final String USER_PWD = "user_pwd";
     private static final String USER_STATUS = "user_status";
     private static final String SYNC_ENABLED = "sync_enabled";
+    private static final String USER_URL = "user_url";
 
     private SharedPreferences mPreference;
     private SharedPreferences.Editor mEditor;
@@ -55,6 +56,9 @@ public class UserPreference {
     public String getUserpwd() {
         return mPreference.getString(USER_PWD, "");
     }
+    public String getUserUrl() {
+        return mPreference.getString(USER_URL, "");
+    }
 
     public void setUserName(String userName) {
         mEditor.putString(USER_NAME, userName);
@@ -71,6 +75,10 @@ public class UserPreference {
 
     public void setPassword(String pwd) {
         mEditor.putString(USER_PWD, pwd);
+        mEditor.commit();
+    }
+    public void setURL(String url) {
+        mEditor.putString(USER_URL, url);
         mEditor.commit();
     }
 

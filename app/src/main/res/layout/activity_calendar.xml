@@ -1,64 +1,90 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
 
     tools:context=".Activity.CalendarActivity">
-
     <LinearLayout
-        android:id="@+id/linearLayout"
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-        <com.shrikanthravi.collapsiblecalendarview.widget.CollapsibleCalendar
+        android:layout_height="wrap_content">
+    <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:id="@+id/calendarView"
-            android:layout_height="wrap_content"
-            app:primaryColor="@color/google_red"
-            app:textColor="@android:color/white"
-            app:selectedItem_textColor="@color/google_red"
-            app:todayItem_textColor="@android:color/white"
-            app:todayItem_background="@drawable/circle_white_stroke_background"
-            app:selectedItem_background="@drawable/circle_white_solid_background"
-            app:buttonLeft_drawableTintColor="@android:color/white"
-            app:buttonRight_drawableTintColor="@android:color/white"
-            app:expandIconColor="@android:color/white">
-        </com.shrikanthravi.collapsiblecalendarview.widget.CollapsibleCalendar>
+            android:layout_height="?attr/actionBarSize"
+            android:background="#009688"
+            android:elevation="4dp"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
-        <!--<com.prolificinteractive.materialcalendarview.MaterialCalendarView xmlns:app="http://schemas.android.com/apk/res-auto"-->
-            <!--android:id="@+id/calendarView"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:background="#FFF"-->
-            <!--app:mcv_selectionColor="#43A047"-->
-            <!--app:mcv_showOtherDates="out_of_range" />-->
-    </LinearLayout>
+
+        <com.github.sundeepk.compactcalendarview.CompactCalendarView
+            android:id="@+id/compactcalendar_view"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            app:compactCalendarBackgroundColor="#00bcd4"
+            app:compactCalendarCurrentDayBackgroundColor="#1a8cd7"
+            app:compactCalendarCurrentSelectedDayBackgroundColor="#E57373"
+            app:compactCalendarTextColor="#FFF"
+            app:compactCalendarTextSize="12sp" />
+
+
+
     <TextView
         android:id="@+id/txt"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:layout_marginTop="8dp"
-        android:fontFamily="@font/mm"
-        android:textColor="#050505"
-        android:text="----- Upcoming Events -----"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
-
-    <ListView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/mm"
+        android:gravity="center"
+        android:text="----- Upcoming Events -----"
+        android:textColor="#050505"
+        />
+
+
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/lst_reminder"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"></android.support.v7.widget.RecyclerView>
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+</LinearLayout>
+
+<android.support.design.widget.FloatingActionButton
+        android:id="@+id/btn_add"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
         android:layout_marginEnd="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txt"></ListView>
+        android:layout_marginBottom="16dp"
+        android:clickable="true"
+        android:src="@drawable/ic_add"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+
+</RelativeLayout>
 
 
 
@@ -67,4 +93,4 @@
 
 
 
-</android.support.constraint.ConstraintLayout>
+

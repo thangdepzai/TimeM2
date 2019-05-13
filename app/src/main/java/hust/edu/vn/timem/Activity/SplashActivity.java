@@ -34,7 +34,7 @@ public class SplashActivity extends AppCompatActivity implements Handler.Callbac
     @Override
     public boolean handleMessage(Message msg) {
         if((boolean)msg.obj){
-            startActivity(new Intent(SplashActivity.this, MainActivity.class));
+            startActivity(new Intent(SplashActivity.this,MainActivity.class));
             finish();
         }else{
             startActivity(new Intent(SplashActivity.this, LoginActivity.class));

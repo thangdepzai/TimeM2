@@ -94,6 +94,16 @@ public class WeatherForecastFragment extends Fragment {
         recycle_forecast.addItemDecoration(new LinePagerIndicatorDecoration());
     }
 
+    @Override
+    public void onDestroy() {
+        compositeDisposable.clear();
+        super.onDestroy();
+    }
 
+    @Override
+    public void onStop() {
+        compositeDisposable.clear();
+        super.onStop();
+    }
 
 }

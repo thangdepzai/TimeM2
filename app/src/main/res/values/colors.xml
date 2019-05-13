@@ -3,7 +3,7 @@
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#3949AB</color>
     <color name="colorAccent">#D81B60</color>
-    <color name="google_red">#FD0E09</color>
+    <!--<color name="google_red">#FD0E09</color>-->
     <color name="cyonColor">#46aaaa</color>
     <color name="lowCyonColor">#beeeee</color>
     <color name="redOrangeColor">#ff5e26</color>
@@ -311,10 +311,15 @@
     <color name="colorPrimary3">#d32f2f</color>
     <color name="colorPrimaryDark3">#c72c2c</color>
     <color name="colorAccent3">#FFFFFF</color>
-    <color name="primary_dark">#292b3d</color>
+    <color name="primary_dark2">#292b3d</color>
     <color name="gray_light">#fafa</color>
     <color name="start_blue">#09c6df</color>
     <color name="end_blue">#0bcce6</color>
-
+    <color name="toolbar_title">#ffffff</color>
+    <color name="primary">#37474f</color>
+    <color name="primary_dark">#263238</color>
+    <color name="accent">#78909c</color>
+    <color name="control_normal">#888888</color>
+    <color name="fab_pressed">#546e7a</color>
 
 </resources>

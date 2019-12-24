@@ -118,8 +118,9 @@ public class ReminderAdapter extends RecyclerView.Adapter<ReminderHolder> {
                                         ReminderDatabase db = new ReminderDatabase(context);
                                         db.deleteReminder(object_list.get(i));
                                         //cap nhat giao dien
-                                        object_list.remove(i);
+                                        
                                         baseHolder.alarmReceiver.cancelAlarm(context, object_list.get(i).getID());
+                                        object_list.remove(i);
                                         notifyItemRemoved(i);
                                         notifyItemRangeChanged(i, object_list.size());
                                         break;
